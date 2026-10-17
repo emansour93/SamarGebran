@@ -242,7 +242,7 @@ export default function Home() {
           <div className={styles.heroContent}>
             <p className={styles.kicker}>DEVELOPER</p>
             <h1>
-              Say Hi from <span>Sam Argebran</span>, Designer and Developer
+              Hi from <span>Samar Gebran</span>
             </h1>
             <p className={styles.introText}>
               I’m a passionate freelancer with a mission to create delightful

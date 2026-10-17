@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sam Argebran | Portfolio",
+  title: "Samar Gebran | Portfolio",
   description:
-    "Portfolio website for Sam Argebran — a product designer and frontend developer building memorable digital experiences.",
+    "Portfolio website for Samar Gebran — a product designer and frontend developer building memorable digital experiences.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
