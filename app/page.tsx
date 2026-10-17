@@ -241,10 +241,9 @@ export default function Home() {
       <main className={styles.main}>
         <section className={styles.hero} id="home">
           <div className={styles.heroContent}>
-            <p className={styles.kicker}>Hello</p>
-            <h1>
-              From <span>Samar Gebran</span>
-            </h1>
+            <p className={styles.kicker}>
+              Hello From <span>Samar Gebran</span>
+            </p>
             <p className={styles.introText}>
               Dedicated to designing meaningful experiences in movement,
               wellness, and personal development. My work combines creativity,
@@ -258,9 +257,7 @@ export default function Home() {
             className={styles.heroVisual}
             aria-label="Profile image placeholder"
           >
-            <div className={styles.avatarFrame}>
-              <div className={styles.avatarGlow} />
-            </div>
+            <div className={styles.avatarFrame}></div>
           </div>
         </section>
 
