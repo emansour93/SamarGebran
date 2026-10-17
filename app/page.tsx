@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 
 const navItems = [
@@ -209,11 +209,24 @@ const posts = [
   },
 ];
 
+const initialFormState = {
+  name: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+};
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [formData, setFormData] = useState(initialFormState);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 900px)");
@@ -249,6 +262,44 @@ export default function Home() {
     setTestimonialIndex((prev) =>
       prev === testimonialGroups.length - 1 ? 0 : prev + 1,
     );
+  };
+
+  const handleInputChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitStatus("loading");
+    setSubmitMessage("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to send the message.");
+      }
+
+      setSubmitStatus("success");
+      setSubmitMessage("Your message has been sent successfully.");
+      setFormData(initialFormState);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Something went wrong.";
+      setSubmitStatus("error");
+      setSubmitMessage(message);
+    }
   };
 
   return (
@@ -493,19 +544,64 @@ export default function Home() {
               <p>CONTACT US</p>
               <h2>Let’s Work Together!</h2>
             </div>
-            <form className={styles.contactForm}>
+            <form className={styles.contactForm} onSubmit={handleSubmit}>
               <div className={styles.formRow}>
-                <input type="text" placeholder="Your Name" />
-                <input type="email" placeholder="Your Email" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Your Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
               <div className={styles.formRow}>
-                <input type="tel" placeholder="Your Phone Number" />
-                <input type="text" placeholder="Subject" />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Your Phone Number"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="text"
+                  name="subject"
+                  placeholder="Subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
+                  required
+                />
               </div>
-              <textarea placeholder="Tell us about your project" rows={5} />
-              <button type="submit" className={styles.primaryButton}>
-                Send Message
+              <textarea
+                name="message"
+                placeholder="Tell us about your project"
+                rows={5}
+                value={formData.message}
+                onChange={handleInputChange}
+                required
+              />
+              <button
+                type="submit"
+                className={styles.primaryButton}
+                disabled={submitStatus === "loading"}
+              >
+                {submitStatus === "loading" ? "Sending..." : "Send Message"}
               </button>
+              {submitMessage ? (
+                <p
+                  className={`${styles.formStatus} ${submitStatus === "success" ? styles.formStatusSuccess : styles.formStatusError}`}
+                >
+                  {submitMessage}
+                </p>
+              ) : null}
             </form>
           </div>
         </section>

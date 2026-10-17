@@ -854,6 +854,19 @@
   width: fit-content;
 }
 
+.formStatus {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.formStatusSuccess {
+  color: #1d7f4d;
+}
+
+.formStatusError {
+  color: #a23a2d;
+}
+
 @media (max-width: 1100px) {
   .page {
     flex-direction: row;
