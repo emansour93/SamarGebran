@@ -98,9 +98,9 @@ function NavIcon({ type }: { type: string }) {
 }
 
 const stats = [
-  { value: "5+", label: "Years of Experience" },
-  { value: "160+", label: "Projects Completed" },
-  { value: "15", label: "Countries" },
+  { value: "20+", label: "Years of Experience" },
+  { value: "60+", label: "Projects Completed" },
+  { value: "10+", label: "Countries" },
 ];
 
 const resumeEntries = [
@@ -199,6 +199,7 @@ const posts = [
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeService, setActiveService] = useState<string | null>(null);
 
   return (
     <div className={styles.page}>
@@ -240,24 +241,17 @@ export default function Home() {
       <main className={styles.main}>
         <section className={styles.hero} id="home">
           <div className={styles.heroContent}>
-            <p className={styles.kicker}>DEVELOPER</p>
+            <p className={styles.kicker}>Hello</p>
             <h1>
-              Hi from <span>Samar Gebran</span>
+              From <span>Samar Gebran</span>
             </h1>
             <p className={styles.introText}>
-              I’m a passionate freelancer with a mission to create delightful
-              and intuitive digital experiences. I specialize in translating
-              complex ideas into user-friendly interfaces that captivate and
-              engage.
+              Dedicated to designing meaningful experiences in movement,
+              wellness, and personal development. My work combines creativity,
+              knowledge, and a client-centered approach to develop programs that
+              inspire growth, support well-being, and create lasting positive
+              impact.
             </p>
-            <div className={styles.heroActions}>
-              <a href="#contact-us" className={styles.primaryButton}>
-                Hire Me
-              </a>
-              <a href="#" className={styles.secondaryButton}>
-                Download CV
-              </a>
-            </div>
           </div>
 
           <div
@@ -266,10 +260,6 @@ export default function Home() {
           >
             <div className={styles.avatarFrame}>
               <div className={styles.avatarGlow} />
-              <div className={styles.avatarCard}>
-                <span>Creative</span>
-                <strong>Designer</strong>
-              </div>
             </div>
           </div>
         </section>
@@ -277,16 +267,23 @@ export default function Home() {
         <section className={styles.aboutSection} id="about-me">
           <div className={styles.sectionIntro}>
             <p>ABOUT ME</p>
-            <h2>Crafting stories through Design and Innovation</h2>
+            <h2>Transforming Health Through Movement, Therapy, and Wellness</h2>
           </div>
           <div className={styles.aboutGrid}>
             <p>
-              Since beginning my journey as a freelance designer nearly 8 years
-              ago, I’ve done remote work for agencies, consulted for startups,
-              and collaborated with talented people to create digital products
-              for both business and consumer use. I’m quietly confident,
-              naturally curious, and perpetually working on improving my chops
-              one design problem at a time.
+              Samar designs and delivers therapeutic, fitness, and wellness
+              programs that integrate evidence‑based methods to support
+              recovery, performance, and overall health. Her work spans
+              injury‑specific training, exercise and rehabilitation program
+              design, and techniques such as dry needling, cranio‑sacral
+              therapy, somatic exercises, and Pilates. She also applies
+              approaches like psychosomatics, neuroplasticity, and postural
+              alignment to enhance mind–body balance. Beyond clinical practice,
+              Samar facilitates education, training, and corporate wellness
+              initiatives, helping individuals and organizations achieve
+              sustainable well‑being. Her focus is on structured,
+              client‑centered solutions that restore function, prevent injury,
+              and promote long‑term vitality
             </p>
             <div className={styles.statsGrid}>
               {stats.map((stat) => (
@@ -305,13 +302,41 @@ export default function Home() {
             <h2>Bringing your vision to life with Precision and Passion</h2>
           </div>
           <div className={styles.servicesGrid}>
-            {serviceItems.map((service) => (
-              <article key={service.title} className={styles.serviceCard}>
-                <div className={styles.serviceIcon}>✦</div>
-                <h3>{service.title}</h3>
-                <p>{service.text}</p>
-              </article>
-            ))}
+            {serviceItems.map((service) => {
+              const isOpen = activeService === service.title;
+
+              return (
+                <article
+                  key={service.title}
+                  className={`${styles.serviceCard} ${isOpen ? styles.serviceCardOpen : ""}`}
+                >
+                  <button
+                    type="button"
+                    className={styles.serviceHeader}
+                    aria-expanded={isOpen}
+                    aria-controls={`${service.title}-content`}
+                    onClick={() =>
+                      setActiveService((current) =>
+                        current === service.title ? null : service.title,
+                      )
+                    }
+                  >
+                    <span className={styles.serviceIcon}>✦</span>
+                    <h3>{service.title}</h3>
+                  </button>
+
+                  <div
+                    id={`${service.title}-content`}
+                    className={styles.serviceBody}
+                    aria-hidden={!isOpen}
+                  >
+                    <div className={styles.serviceBodyInner}>
+                      <p>{service.text}</p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 

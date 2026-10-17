@@ -238,8 +238,9 @@
   color: #8f6a4b;
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-size: 1.2rem;
 }
 
 .heroContent h1 {
@@ -471,14 +472,34 @@
 
 .servicesGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
 }
 
 .serviceCard {
-  padding: 26px 20px;
+  padding: 18px 18px 14px;
   border-radius: 20px;
   background: #f0e7e0;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+}
+
+.serviceHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
 }
 
 .serviceIcon {
@@ -491,16 +512,42 @@
   background: rgba(26, 26, 26, 0.06);
   font-size: 1.4rem;
   color: #1d1d1d;
+  flex-shrink: 0;
 }
 
 .serviceCard h3 {
-  margin-top: 20px;
+  margin: 0;
   font-size: 1.5rem;
   letter-spacing: -0.04em;
+  transition: color 0.2s ease;
+}
+
+.serviceCardOpen h3 {
+  color: #7b5d3c;
+}
+
+.serviceBody {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    margin-top 0.25s ease;
+}
+
+.serviceCardOpen .serviceBody {
+  max-height: 180px;
+  opacity: 1;
+  margin-top: 16px;
+}
+
+.serviceBodyInner {
+  padding-top: 2px;
 }
 
 .serviceCard p {
-  margin-top: 12px;
+  margin: 0;
   line-height: 1.8;
   color: rgba(29, 29, 29, 0.72);
 }
@@ -723,7 +770,6 @@
   }
 
   .sidebar {
-    position: absolute;
     top: 0;
     left: 0;
     z-index: 10;
