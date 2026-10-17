@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 
 const navItems = [
@@ -177,6 +177,18 @@ const testimonials = [
     name: "Olivia Carter",
     role: "Founder",
   },
+  {
+    quote:
+      "From branding to front-end execution, the work elevated our presence and improved the quality of every customer touchpoint.",
+    name: "Oliver Carter",
+    role: "Founder",
+  },
+  {
+    quote:
+      "From branding to front-end execution, the work elevated our presence and improved the quality of every customer touchpoint.",
+    name: "Carter Oliver",
+    role: "Founder",
+  },
 ];
 
 const posts = [
@@ -200,6 +212,44 @@ const posts = [
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeService, setActiveService] = useState<string | null>(null);
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 900px)");
+
+    const handleChange = () => setIsMobile(mediaQuery.matches);
+
+    handleChange();
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  const testimonialGroups = useMemo(() => {
+    if (isMobile) {
+      return testimonials.map((testimonial) => [testimonial]);
+    }
+
+    const groups: (typeof testimonials)[] = [];
+    for (let index = 0; index < testimonials.length; index += 2) {
+      groups.push(testimonials.slice(index, index + 2));
+    }
+
+    return groups;
+  }, [isMobile]);
+
+  const showPreviousTestimonial = () => {
+    setTestimonialIndex((prev) =>
+      prev === 0 ? testimonialGroups.length - 1 : prev - 1,
+    );
+  };
+
+  const showNextTestimonial = () => {
+    setTestimonialIndex((prev) =>
+      prev === testimonialGroups.length - 1 ? 0 : prev + 1,
+    );
+  };
 
   return (
     <div className={styles.page}>
@@ -360,21 +410,79 @@ export default function Home() {
             <p>TESTIMONIALS</p>
             <h2>Trusted By Hundred Clients</h2>
           </div>
-          <div className={styles.testimonialsGrid}>
-            {testimonials.map((item) => (
-              <article key={item.name} className={styles.testimonialCard}>
-                <div className={styles.quoteMark}>“</div>
-                <p>{item.quote}</p>
-                <div className={styles.person}>
-                  <div className={styles.personAvatar}>
-                    {item.name.charAt(0)}
+
+          <div className={styles.testimonialsCarousel}>
+            <button
+              type="button"
+              className={styles.carouselButton}
+              aria-label="Previous testimonial"
+              onClick={showPreviousTestimonial}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+
+            <div className={styles.testimonialsViewport}>
+              <div
+                className={styles.testimonialsTrack}
+                style={{ transform: `translateX(-${testimonialIndex * 100}%)` }}
+              >
+                {testimonialGroups.map((group, groupIndex) => (
+                  <div
+                    key={`group-${groupIndex}`}
+                    className={styles.testimonialSlide}
+                  >
+                    <div className={styles.testimonialGroup}>
+                      {group.map((item) => (
+                        <article
+                          key={item.name}
+                          className={styles.testimonialCard}
+                        >
+                          <div className={styles.quoteMark}>“</div>
+                          <p>{item.quote}</p>
+                          <div className={styles.person}>
+                            <div className={styles.personAvatar}>
+                              {item.name.charAt(0)}
+                            </div>
+                            <div>
+                              <strong>{item.name}</strong>
+                              <span>{item.role}</span>
+                            </div>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <strong>{item.name}</strong>
-                    <span>{item.role}</span>
-                  </div>
-                </div>
-              </article>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className={styles.carouselButton}
+              aria-label="Next testimonial"
+              onClick={showNextTestimonial}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          </div>
+
+          <div
+            className={styles.carouselDots}
+            aria-label="Select testimonial slide"
+          >
+            {testimonialGroups.map((group, index) => (
+              <button
+                key={`dot-${index}`}
+                type="button"
+                className={`${styles.carouselDot} ${index === testimonialIndex ? styles.carouselDotActive : ""}`}
+                aria-label={`Show testimonial group ${index + 1}`}
+                aria-pressed={index === testimonialIndex}
+                onClick={() => setTestimonialIndex(index)}
+              />
             ))}
           </div>
         </section>
