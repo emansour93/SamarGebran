@@ -129,20 +129,52 @@ const resumeEntries = [
 
 const serviceItems = [
   {
-    title: "UI/UX Design",
-    text: "Thoughtful interfaces shaped around clarity, conversion, and a polished customer journey.",
+    title: "Dry Needling",
+    text: "Dry needling is a therapeutic technique using fine needles inserted into muscle trigger points.\nIt releases tension, reduces pain, and improves mobility.\nCommonly applied in sports medicine and physiotherapy. Distinct from acupuncture, as it targets musculoskeletal issues.",
   },
   {
-    title: "App Development",
-    text: "Modern mobile and web product experiences built for performance, usability, and growth.",
+    title: "Peripheral Reflexotherapy",
+    text: "Peripheral Reflexotherapy is a manual therapy stimulating reflex zones in the body. \nGentle pressure influences the nervous system and circulation.\nIt reduces pain, restores balance, and supports rehabilitation. \nOften combined with physiotherapy to enhance recovery.",
   },
   {
-    title: "Web Development",
-    text: "Conversion-focused websites and product pages designed to look premium and perform fast.",
+    title: "Injury-Specific Training",
+    text: "Exercise programs tailored to a particular injury.\nThey restore strength, mobility, and function in the affected area.\nMovements are progressive and designed to avoid aggravation.\nHelps clients return safely to daily activities or sports.",
   },
   {
-    title: "SEO & Marketing",
-    text: "Content strategy and digital positioning that help brands stand out and attract qualified traffic.",
+    title: "Cranio-Sacral Therapy",
+    text: "A gentle, hands-on treatment working with cerebrospinal fluid rhythms.\nLight touch releases restrictions in cranial and sacral areas.\nIt reduces stress, eases pain, and supports nervous system balance.\n\Often used for headaches, tension, and emotional well-being.",
+  },
+  {
+    title: "Somatic Exercises",
+    text: "Gentle movements that improve body awareness and release tension.\nThey retrain movement patterns to restore posture and flexibility./nUseful for stress relief, chronic pain, and rehabilitation.\nRegular practice helps clients move with ease and efficiency.",
+  },
+  {
+    title: "Pilates",
+    text: "Pilates is a structured exercise system focusing on controlled movements and breathing.\nIt strengthens core muscles, improves posture, and enhances flexibility.\nWidely used in rehabilitation, it supports recovery and prevents injuries.\nThe method emphasizes precision, alignment, and mind–body connection.",
+  },
+  {
+    title: "Psychosomatics",
+    text: "Psychosomatics studies how the mind and emotions affect physical health.\nIt explains how stress, anxiety, or unresolved feelings can lead to bodily symptoms.\nThe approach highlights the connection between psychological states and illness.\nTherapists use it to address both mental and physical aspects of recovery",
+  },
+  {
+    title: "Corporate Wellness",
+    text: "Corporate wellness focuses on improving employee health and well-being in the workplace.\nPrograms may include stress management, ergonomics, fitness, and nutrition workshops.\nThe goal is to boost productivity, reduce absenteeism, and create a healthier work culture.\nIt bridges professional performance with personal health, benefiting both employees and organizations.",
+  },
+  {
+    title: "Education, Training, and Development",
+    text: "Education, training, and development involve teaching skills and knowledge to individuals or groups.\nThey include designing courses, conducting workshops, and supervising practical experiences.\nThe goal is to enhance professional growth, performance, and lifelong learning.\nThis approach supports both personal advancement and organizational success.",
+  },
+  {
+    title: "Hands-On Postural Alignment",
+    text: "Hands-on postural alignment uses manual guidance to correct body positioning.\nIt helps clients achieve proper alignment of the spine, shoulders, and hips.\nThe technique reduces strain, improves balance, and prevents injury.\nOften integrated into rehabilitation and fitness programs for long-term posture health.",
+  },
+  {
+    title: "Neuroplasticity",
+    text: "Neuroplasticity refers to the brain’s ability to adapt and reorganize itself.\nIt allows new connections to form after injury, learning, or therapy.\nThis principle is used in rehabilitation to restore function and improve performance.\nPractices such as targeted exercise, mindfulness, and skill training enhance neuroplastic changes.",
+  },
+  {
+    title: "Exercise and Rehab Program Design",
+    text: "Exercise and rehab program design involves creating structured plans for recovery and performance.\nPrograms are tailored to individual needs, injuries, or health conditions.\nThey combine strength, mobility, and functional training to restore ability.\nThe approach ensures safe progression and long-term health improvement.",
   },
 ];
 
@@ -346,11 +378,8 @@ export default function Home() {
               Hello From <span>Samar Gebran</span>
             </p>
             <p className={styles.introText}>
-              Dedicated to designing meaningful experiences in movement,
-              wellness, and personal development. My work combines creativity,
-              knowledge, and a client-centered approach to develop programs that
-              inspire growth, support well-being, and create lasting positive
-              impact.
+              University Instructor -Corporate Wellness Consultant - Expert in
+              Sports Therapy & Rehabilitation - Pilates Trainer - Educator
             </p>
           </div>
 
@@ -369,19 +398,11 @@ export default function Home() {
           </div>
           <div className={styles.aboutGrid}>
             <p>
-              Samar designs and delivers therapeutic, fitness, and wellness
-              programs that integrate evidence‑based methods to support
-              recovery, performance, and overall health. Her work spans
-              injury‑specific training, exercise and rehabilitation program
-              design, and techniques such as dry needling, cranio‑sacral
-              therapy, somatic exercises, and Pilates. She also applies
-              approaches like psychosomatics, neuroplasticity, and postural
-              alignment to enhance mind–body balance. Beyond clinical practice,
-              Samar facilitates education, training, and corporate wellness
-              initiatives, helping individuals and organizations achieve
-              sustainable well‑being. Her focus is on structured,
-              client‑centered solutions that restore function, prevent injury,
-              and promote long‑term vitality
+              Dedicated to designing meaningful experiences in movement,
+              wellness, and personal development. My work combines creativity,
+              knowledge, and a client-centered approach to develop programs that
+              inspire growth, support well-being, and create lasting positive
+              impact.
             </p>
             <div className={styles.statsGrid}>
               {stats.map((stat) => (
@@ -397,7 +418,7 @@ export default function Home() {
         <section className={styles.servicesSection} id="services">
           <div className={styles.sectionIntro}>
             <p>MY SERVICES</p>
-            <h2>Bringing your vision to life with Precision and Passion</h2>
+            <h2>Comprehensive Solutions for Your Health and Wellness Goals</h2>
           </div>
           <div className={styles.servicesGrid}>
             {serviceItems.map((service) => {
@@ -441,7 +462,7 @@ export default function Home() {
         <section className={styles.portfolioSection} id="projects">
           <div className={styles.sectionIntro}>
             <p>PORTFOLIO</p>
-            <h2>Elevate your brand to new heights with our expertise</h2>
+            <h2>Showcasing Our Work and Impact</h2>
           </div>
           <div className={styles.portfolioGrid}>
             {projects.map((project) => (
