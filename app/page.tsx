@@ -190,10 +190,38 @@ const skills = [
 ];
 
 const projects = [
-  { name: "Corporate Branding", area: "Brand Strategy" },
-  { name: "Pocket FM Radio", area: "Audio Experience" },
-  { name: "Crypto App UI Design", area: "Product Design" },
-  { name: "Bank App Development", area: "Mobile Product" },
+  {
+    name: "Pilates Instruction",
+    area: "Teacher Training",
+  },
+  {
+    name: "Group Classes & Individual Sessions",
+    area: "Pilates Coaching",
+  },
+  {
+    name: "Mat & Apparatus Classes",
+    area: "Reformer, Cadillac, Tower, Trapeze Table, Chair, Barrel",
+  },
+  {
+    name: "Special Population Programs",
+    area: "Injury, Pre/Post-Partum, Elderly",
+  },
+  {
+    name: "Management & Consultancy",
+    area: "Gym & Pilates Studio Management",
+  },
+  {
+    name: "Rehabilitation Clinic Launches",
+    area: "Systems & Strategic Development",
+  },
+  {
+    name: "Corporate Wellness",
+    area: "Office Posture & Movement Programs",
+  },
+  {
+    name: "University Teaching & Course Design",
+    area: "Workshops, Jury, Syllabi, Facilitation",
+  },
 ];
 
 const testimonials = [
@@ -461,8 +489,8 @@ export default function Home() {
 
         <section className={styles.portfolioSection} id="projects">
           <div className={styles.sectionIntro}>
-            <p>PORTFOLIO</p>
-            <h2>Showcasing Our Work and Impact</h2>
+            <p>PROJECTS</p>
+            <h2>Movement, Training, and Education Expertise</h2>
           </div>
           <div className={styles.portfolioGrid}>
             {projects.map((project) => (

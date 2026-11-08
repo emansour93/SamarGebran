@@ -321,7 +321,7 @@
   background: linear-gradient(180deg, #151515 0%, #2a2a2a 100%);
   box-shadow: 0 30px 60px rgba(20, 20, 20, 0.14);
   overflow: hidden;
-  background-image: url("../public/images/portfolioW.jpeg");
+  background-image: url("../public/images/portfolioWhite.jpeg");
   background-size: cover;
   background-position: center;
 }
