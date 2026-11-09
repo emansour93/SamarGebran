@@ -1,13 +1,145 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 3;
+const recentSubmissions = new Map<string, number[]>();
+const spamKeywords = [
+  "viagra",
+  "casino",
+  "bitcoin",
+  "crypto",
+  "lottery",
+  "click here",
+  "earn money",
+  "free money",
+  "work from home",
+  "sex",
+  "nude",
+  "adult",
+  "loan",
+  "investment",
+  "trading",
+];
+
+function getClientIp(request: Request) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0].trim();
+  }
+
+  return request.headers.get("x-real-ip") || "unknown-client";
+}
+
+function isRateLimited(ip: string) {
+  const now = Date.now();
+  const previousRequests = recentSubmissions.get(ip) ?? [];
+  const recentRequests = previousRequests.filter(
+    (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS,
+  );
+
+  if (recentRequests.length >= MAX_REQUESTS_PER_WINDOW) {
+    return true;
+  }
+
+  recentRequests.push(now);
+  recentSubmissions.set(ip, recentRequests);
+  return false;
+}
+
+function sanitizeText(value: unknown) {
+  return String(value ?? "")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function containsSpamPattern(value: string) {
+  const lower = value.toLowerCase();
+
+  if (/(https?:\/\/|www\.)/i.test(lower)) {
+    return true;
+  }
+
+  const normalized = lower.replace(/[^a-z0-9\s]/g, " ");
+  return spamKeywords.some((keyword) => normalized.includes(keyword));
+}
+
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, subject, message } = await request.json();
+    const body = await request.json();
+    const { name, email, phone, subject, message, website } = body;
+    const clientIp = getClientIp(request);
 
-    if (!name || !email || !subject || !message) {
+    if (website) {
+      return NextResponse.json({ error: "Spam detected." }, { status: 400 });
+    }
+
+    if (isRateLimited(clientIp)) {
+      return NextResponse.json(
+        {
+          error:
+            "Too many submissions from this device. Please wait a few minutes and try again.",
+        },
+        { status: 429 },
+      );
+    }
+
+    const cleanName = sanitizeText(name);
+    const cleanEmail = sanitizeText(email).toLowerCase();
+    const cleanPhone = sanitizeText(phone);
+    const cleanSubject = sanitizeText(subject);
+    const cleanMessage = sanitizeText(message);
+
+    if (!cleanName || !cleanEmail || !cleanSubject || !cleanMessage) {
       return NextResponse.json(
         { error: "Name, email, subject, and message are required." },
+        { status: 400 },
+      );
+    }
+
+    if (cleanName.length < 2 || cleanName.length > 80) {
+      return NextResponse.json(
+        { error: "Please use a valid name between 2 and 80 characters." },
+        { status: 400 },
+      );
+    }
+
+    if (cleanSubject.length < 3 || cleanSubject.length > 120) {
+      return NextResponse.json(
+        { error: "Subject must be between 3 and 120 characters." },
+        { status: 400 },
+      );
+    }
+
+    if (cleanMessage.length < 10 || cleanMessage.length > 2000) {
+      return NextResponse.json(
+        { error: "Message must be between 10 and 2000 characters." },
+        { status: 400 },
+      );
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(cleanEmail)) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
+        { status: 400 },
+      );
+    }
+
+    if (cleanPhone && !/^[+()\d\s-]{7,20}$/.test(cleanPhone)) {
+      return NextResponse.json(
+        { error: "Please enter a valid phone number." },
+        { status: 400 },
+      );
+    }
+
+    if (
+      containsSpamPattern(cleanName) ||
+      containsSpamPattern(cleanSubject) ||
+      containsSpamPattern(cleanMessage)
+    ) {
+      return NextResponse.json(
+        { error: "Your message looks suspicious and was blocked." },
         { status: 400 },
       );
     }
@@ -36,20 +168,20 @@ export async function POST(request: Request) {
       },
     });
 
-    const formattedMessage = message.replace(/\n/g, "<br />");
+    const formattedMessage = cleanMessage.replace(/\n/g, "<br />");
 
     await transporter.sendMail({
       from: smtpUser,
       to,
-      replyTo: email,
-      subject: `New contact form message: ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || "Not provided"}\nSubject: ${subject}\n\n${message}`,
+      replyTo: cleanEmail,
+      subject: `New contact form message: ${cleanSubject}`,
+      text: `Name: ${cleanName}\nEmail: ${cleanEmail}\nPhone: ${cleanPhone || "Not provided"}\nSubject: ${cleanSubject}\n\n${cleanMessage}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1d1d1d;">
-          <h2 style="margin-bottom: 12px;">New message from ${name}</h2>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
-          <p><strong>Subject:</strong> ${subject}</p>
+          <h2 style="margin-bottom: 12px;">New message from ${cleanName}</h2>
+          <p><strong>Email:</strong> ${cleanEmail}</p>
+          <p><strong>Phone:</strong> ${cleanPhone || "Not provided"}</p>
+          <p><strong>Subject:</strong> ${cleanSubject}</p>
           <div style="margin-top: 18px; padding: 16px; background: #f5f5f5; border-radius: 10px;">
             ${formattedMessage}
           </div>

@@ -191,36 +191,24 @@ const skills = [
 
 const projects = [
   {
-    name: "Pilates Instruction",
-    area: "Teacher Training",
+    name: "Pilates Instructor",
+    area: "Teacher Training, Group classes and individual sessions, Pilates mat and apparatus classes (reformer, cadillac, tower, trapeze table, chair, barrel), Pilates for special population (injury, pre/post partum, elderly)",
   },
   {
-    name: "Group Classes & Individual Sessions",
-    area: "Pilates Coaching",
+    name: "Management and Consultancy Projects",
+    area: "Launching rehabilitation clinics",
   },
   {
-    name: "Mat & Apparatus Classes",
-    area: "Reformer, Cadillac, Tower, Trapeze Table, Chair, Barrel",
-  },
-  {
-    name: "Special Population Programs",
-    area: "Injury, Pre/Post-Partum, Elderly",
-  },
-  {
-    name: "Management & Consultancy",
-    area: "Gym & Pilates Studio Management",
-  },
-  {
-    name: "Rehabilitation Clinic Launches",
-    area: "Systems & Strategic Development",
+    name: "Consulting fitness centers and clinics",
+    area: "Procurement, Hiring and recruitment, System set-up",
   },
   {
     name: "Corporate Wellness",
-    area: "Office Posture & Movement Programs",
+    area: "Setting up offices for better posture. \nAdvising on movement during work hours. \nDesigning specialised programs for individuals and groups",
   },
   {
     name: "University Teaching & Course Design",
-    area: "Workshops, Jury, Syllabi, Facilitation",
+    area: "University instructor \n Workshop facilitator \nJury member for theses defence \nCourse and syllabi design",
   },
 ];
 
@@ -275,6 +263,7 @@ const initialFormState = {
   phone: "",
   subject: "",
   message: "",
+  website: "",
 };
 
 export default function Home() {
@@ -497,8 +486,8 @@ export default function Home() {
               <article key={project.name} className={styles.projectCard}>
                 <div className={styles.projectImage} aria-hidden="true" />
                 <div className={styles.projectMeta}>
-                  <span>{project.area}</span>
                   <strong>{project.name}</strong>
+                  <span>{project.area}</span>
                 </div>
               </article>
             ))}
@@ -594,6 +583,15 @@ export default function Home() {
               <h2>Let’s Work Together!</h2>
             </div>
             <form className={styles.contactForm} onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={handleInputChange}
+                style={{ display: "none" }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
               <div className={styles.formRow}>
                 <input
                   type="text"
@@ -602,6 +600,8 @@ export default function Home() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
+                  minLength={2}
+                  maxLength={80}
                 />
                 <input
                   type="email"
@@ -610,6 +610,7 @@ export default function Home() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
+                  maxLength={120}
                 />
               </div>
               <div className={styles.formRow}>
@@ -619,6 +620,7 @@ export default function Home() {
                   placeholder="Your Phone Number"
                   value={formData.phone}
                   onChange={handleInputChange}
+                  maxLength={20}
                 />
                 <input
                   type="text"
@@ -627,6 +629,8 @@ export default function Home() {
                   value={formData.subject}
                   onChange={handleInputChange}
                   required
+                  minLength={3}
+                  maxLength={120}
                 />
               </div>
               <textarea
@@ -636,6 +640,8 @@ export default function Home() {
                 value={formData.message}
                 onChange={handleInputChange}
                 required
+                minLength={10}
+                maxLength={2000}
               />
               <button
                 type="submit"
